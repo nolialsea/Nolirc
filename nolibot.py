@@ -8,15 +8,14 @@ bot.timeout = 1
 #List of mods you want to use
 #async are called every step
 module_async = [
-	mod.ModVote(bot)
+	#mod.ModVote(bot)
 ]
+
 #sync are called every step ONLY if a message is received
 module_sync = [
 	mod.ModLog(bot),
 	mod.ModControl(bot)
 ]
-
-#bot.send("\x01ACTION headbut Bl4ckbot\x01")
 
 #Main loop
 while True:

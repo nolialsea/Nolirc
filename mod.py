@@ -10,11 +10,13 @@ class ModControl():
 			print("End Program")
 			quit()
 		if event.type == "channel" and event.msg == self.bot.nick + " quit()":
+			self.bot.send("\x01ACTION headbutt everyone before dying\x01")
 			print("End Program")
 			quit()
 
 class ModLog():
 	def __init__(self, bot):
+		self.bot = bot
 		pass
 		
 	def step(self, event):
