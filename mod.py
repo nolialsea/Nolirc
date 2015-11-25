@@ -2,10 +2,14 @@ from time import time
 
 class ModControl():
 	def __init__(self, bot):
+		self.bot = bot
 		pass
 		
 	def step(self, event):
 		if event.type == "private" and event.msg == "quit()":
+			print("End Program")
+			quit()
+		if event.type == "channel" and event.msg == self.bot.nick + " quit()":
 			print("End Program")
 			quit()
 

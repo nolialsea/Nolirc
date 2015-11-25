@@ -16,6 +16,8 @@ module_sync = [
 	mod.ModControl(bot)
 ]
 
+#bot.send("\x01ACTION headbut Bl4ckbot\x01")
+
 #Main loop
 while True:
 	msgEvent = bot.step()
