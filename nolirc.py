@@ -97,6 +97,7 @@ class Nolirc:
 		if (self.message_connexion != ""):
 			time.sleep(0.5)
 			self.sock.send(bytes("PRIVMSG %s %s\r\n" % (self.channel, self.message_connexion), "UTF-8"))
+			self.sock.send(bytes("WHO %s\r\n" % self.channel, "UTF-8"))
 	
 	def disconnectChannel(self, chan = None):
 		if (chan != None):

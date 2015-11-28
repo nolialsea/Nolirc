@@ -1,5 +1,15 @@
 from time import time
 
+class ModWizz():
+	def __init__(self, bot):
+		self.bot = bot
+		pass
+		
+	def step(self, event):
+		if event.type == "channel" and event.msg == self.bot.nick + " wizzAll":
+			self.bot.send("\x01ACTION Wizz "+str(self.bot.connected)+"\x01")
+			print("WizzAll")
+
 class ModControl():
 	def __init__(self, bot):
 		self.bot = bot

@@ -13,6 +13,7 @@ module_async = [
 
 #sync are called every step ONLY if a message is received
 module_sync = [
+	mod.ModWizz(bot),
 	mod.ModLog(bot),
 	mod.ModControl(bot)
 ]
