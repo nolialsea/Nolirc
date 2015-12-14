@@ -1,9 +1,11 @@
-﻿import nolirc, conf
+import nolirc, conf
 import mod
 
 #nolirc.Bot(nick, host, port, login, password, identity, realname, channel = None, autoconnect = True)
 bot = nolirc.Bot(conf.nick, conf.host, conf.port, conf.login, conf.password, conf.identity, conf.realname, channel = conf.channel)
 bot.timeout = 1
+initialized = False
+
 
 #List of mods you want to use
 #async are called every step
@@ -39,6 +41,9 @@ while True:
 	"""
 
 	if msgEvent != None:
+		if initialized == False:
+			bot.getChannelNames()
+			initialized = True
 		for m in module_sync:
 			m.step(msgEvent)
 			
