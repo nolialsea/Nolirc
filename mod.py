@@ -6,6 +6,9 @@ class ModWizz():
 		pass
 		
 	def step(self, event):
+		if event.type == "channel" and event.msg == self.bot.nick + " getNames":
+			self.bot.getChannelNames()
+			print(Getting channel NAMES...)
 		if event.type == "channel" and event.msg == self.bot.nick + " wizzAll":
 			self.bot.send("\x01ACTION Wizz "+str(self.bot.connected)+"\x01")
 			print("WizzAll")
