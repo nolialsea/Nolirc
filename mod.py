@@ -1,10 +1,17 @@
 from time import time
 
+class ModBitcoin():
+	def __init__(self, bot):
+		self.bot = bot
+	
+	def step(self, event):
+		if event.type == "channel" and event.msg == self.bot.nick + ".getMoney()":
+			self.bot.send("This isn't implemented yet.")
+		
 class ModWizz():
 	def __init__(self, bot):
 		self.bot = bot
-		pass
-		
+			
 	def step(self, event):
 		if event.type == "channel" and event.msg == self.bot.nick + " getNames":
 			self.bot.getChannelNames()
