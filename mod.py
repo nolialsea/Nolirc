@@ -1,10 +1,52 @@
 from time import time
+import json
 
 class ModBitcoin():
+	"""
+		TODO:
+			- User object : keep informations about users
+				- Nick
+				- Last manual mining
+				- Money
+				- Inventory	(array of Items)
+				
+			- Item object : represent any item
+				- Title
+				- Description
+				- Creator
+				- Owners (array of owners in chronological order)
+				- Price
+				- ForSell (boolean value)
+				
+			- Inventory object : hold items and shit, contain functions to publically show your inventory or all your items for sell
+			
+			- Auto Mining : automatically mine every X minutes a small amount of money when you are connected
+			- Manual Mining : manually mine a random amount of money with a command (disable itself for X minutes)
+			- Create Item : users can create "any" item with a title, description, and price if he want to sell it to the others players
+	"""
+
 	def __init__(self, bot):
 		self.bot = bot
+		self.pingInterval = 60*10
+		self.file = "user.json"
+		self.user = []
+		self.lastPing = time()
+		self.load()
+	
+	def load(self):
+		with open('user.json', 'r') as fp:
+			self.user = json.load(fp)
+	
+	def save(self):
+		with open('user.json', 'w') as fp:
+			json.dump(self.user, fp)
 	
 	def step(self, event):
+		if time() - self.lastPing > self.pingInterval:
+			for (user in self.user):
+				for (connected in self.bot.connected):
+			self.bot.getChannelNames()
+			pass
 		if event.type == "channel" and event.msg == self.bot.nick + ".getMoney()":
 			self.bot.send("This isn't implemented yet.")
 		

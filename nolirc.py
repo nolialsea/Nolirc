@@ -5,10 +5,10 @@ class Nolirc:
 		self.host = "irc.mibbit.net"
 		self.port = 6667
 		self.password = "noli_lib_irc"
-		self.nick = "NoliBot"
+		self.nick = "nolibot"
 		self.identity = "noli_lib_irc"
 		self.realname = "noli_lib_irc_by_Nolialsea"
-		self.channel = "#nolichan"
+		self.channel = "#cbna"
 		self.chan = self.channel
 		
 		self.timeout = 1

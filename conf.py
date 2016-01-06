@@ -1,4 +1,4 @@
-nick = "NoliBot"
+nick = "nolibot"
 host = "irc.mibbit.net"
 port = 6667
 channel = "#cbna"
