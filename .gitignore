@@ -188,7 +188,6 @@ $RECYCLE.BIN/
 #############
 
 *.py[cod]
-*.pyc
 
 # Packages
 *.egg
@@ -201,6 +200,7 @@ var/
 sdist/
 develop-eggs/
 __pycache__/
+botcoin/__pycache__/
 .idea/
 .installed.cfg
 

@@ -1,4 +1,4 @@
-botNick = None
+botNick = ["bc"]
 _commandChar = [".", ": "]
 
 aliases = {
@@ -11,8 +11,7 @@ aliases = {
 
 
 def init( botNick_ ):
-	global botNick
-	botNick = botNick_
+	botNick.append(botNick_)
 
 
 def getMoney( msg, canal ):
@@ -45,7 +44,7 @@ def isCommand( msg_, canal, alias_ ):
 	for alias in alias_:
 		alias = alias.lower()
 		for commandChar in _commandChar:
-			if (msg.find(botNick + commandChar + alias) == 0 and canal == False) or (
-							msg.find(alias) == 0 and canal != False):
-				return True
+			for nick in botNick:
+				if (msg.find(nick + commandChar + alias) == 0 and not canal) or (msg.find(alias) == 0 and canal):
+					return True
 	return False

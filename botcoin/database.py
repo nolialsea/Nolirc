@@ -3,11 +3,16 @@ import sqlite3
 from time import time
 
 debug = True
-db = sqlite3.connect('botcoin/database.db')
+db = None
 
 
-def init( ):
-	# deleteDatabase()
+def init( reset = False ):
+	global db
+	if reset:
+		db = sqlite3.connect('database.db')
+		deleteDatabase()
+	else:
+		db = sqlite3.connect('botcoin/database.db')
 	createDatabase()
 
 
@@ -41,7 +46,8 @@ def createDatabase( ):
 			id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 			nick TEXT UNIQUE,
 			money REAL DEFAULT 0,
-			lastMining INTEGER DEFAULT """ + str(math.floor(time())) + """
+			lastMining INTEGER DEFAULT """ + str(math.floor(time())) + """,
+			lastCraft INTEGER DEFAULT """ + str(math.floor(time())) + """
 		)
 	""")
 	cursorExecute("""
@@ -52,7 +58,8 @@ def createDatabase( ):
 			creator INTEGER,
 			dateCreation INTEGER DEFAULT """ + str(math.floor(time())) + """,
 			owner INTEGER,
-			price REAL DEFAULT 0,
+			price REAL DEFAULT 1,
+			priceMultiplier REAL DEFAULT 2,
 			forSell INTEGER DEFAULT 0
 		)
 	""")
@@ -75,3 +82,7 @@ def createDatabase( ):
 			date INTEGER DEFAULT """ + str(math.floor(time())) + """
 		)
 	""")
+
+
+if __name__ == '__main__':
+	init(True)
