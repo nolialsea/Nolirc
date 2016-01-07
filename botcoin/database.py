@@ -45,7 +45,7 @@ def createDatabase( ):
 		CREATE TABLE IF NOT EXISTS User(
 			id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 			nick TEXT UNIQUE,
-			money REAL DEFAULT 0,
+			money REAL DEFAULT 1,
 			lastMining INTEGER DEFAULT """ + str(math.floor(time())) + """,
 			lastCraft INTEGER DEFAULT """ + str(math.floor(time())) + """
 		)

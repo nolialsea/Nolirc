@@ -17,10 +17,10 @@ def init( cursorExecute_ ):
 # createUser("Noli")
 # print(getUserByNick("Noli"))
 
-def createUser( nick, money = 0, lastMining = math.floor(time()) ):
+def createUser( nick, lastMining = math.floor(time()) ):
 	return cursorExecute(
-			"INSERT INTO User (nick, money, lastMining) VALUES (?, ?, ?)",
-			(nick, money, lastMining)
+			"INSERT INTO User (nick, lastMining) VALUES (?, ?)",
+			(nick, lastMining)
 	)
 
 
@@ -30,7 +30,15 @@ def getUserByNick( nick ):
 			(nick,)
 	)
 	if result and result != []:
-		return result[0]
+		result = result[0]
+		user = {
+			"id": result[0],
+			"nick": result[1],
+			"money": result[2],
+			"lastMining": result[3],
+			"lastCraft": result[4]
+		}
+		return user
 	return None
 
 
@@ -38,17 +46,17 @@ def getMoney( nick ):
 	result = None
 	user = getUserByNick(nick)
 	if user:
-		return user[2]
+		return user["money"]
 	return None
 
 
 def giveMoney( nickSender, nickReveiver, amount ):
 	result = None
-	userSender = getUserByNick(nickSender)
-	userReceiver = getUserByNick(nickReveiver)
-	if userSender and userReceiver:
-		if userSender[2]<amount:
-			amount = userSender[2]
+	sender = getUserByNick(nickSender)
+	receiver = getUserByNick(nickReveiver)
+	if sender and receiver:
+		if sender["money"] < amount:
+			amount = sender["money"]
 		cursorExecute(
 				"INSERT INTO MoneyTransaction (sender, receiver, amount) VALUES (?, ?, ?)",
 				(nickSender, nickReveiver, amount)
@@ -65,7 +73,7 @@ def addMoney( nick, amount ):
 	if user:
 		result = cursorExecute(
 				"UPDATE User SET money = ? WHERE nick = ?",
-				(user[2] + amount, nick)
+				(user["money"] + amount, nick)
 		)
 	return result
 

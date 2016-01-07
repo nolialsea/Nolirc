@@ -1,11 +1,12 @@
 botNick = ["bc"]
-_commandChar = [".", ": "]
+_commandChar = [".", ":"]
 
 aliases = {
 	"getMoney": ["getMoney", "getm"],
 	"showMoney": ["showMoney", "showm"],
-	"mine": ["mine", "Mine"],
+	"mine": ["mine"],
 	"giveMoney": ["giveMoney", "givem"],
+	"craftItem": ["craftItem", "craft"],
 	"help": ["help"],
 }
 
@@ -31,6 +32,11 @@ def mine( msg, canal ):
 
 def giveMoney( msg, canal ):
 	_alias = aliases["giveMoney"]
+	return isCommand(msg, canal, _alias)
+
+
+def craftItem( msg, canal ):
+	_alias = aliases["craftItem"]
 	return isCommand(msg, canal, _alias)
 
 

@@ -37,9 +37,9 @@ class ModBotcoin:
 	def __init__( self, bot ):
 		self.bot = bot
 		commands.init(self.bot.nick)
-		self.pingInterval = 10
+		self.pingInterval = 20
 		self.lastPing = time() - self.pingInterval + 1
-		self.bot.send('Botcoin started ! Type "' + self.bot.nick + '.help()" to view the commands')
+		self.bot.send('Botcoin started ! Type "' + self.bot.nick + '.help" to view the commands')
 
 	def getMoney( self, event, canal ):
 		money = User.getMoney(event.nick)
@@ -61,17 +61,17 @@ class ModBotcoin:
 		user = User.getUserByNick(event.nick)
 		print(user)
 		if user:
-			delta = time() - user[3]
-			if delta>60 * 60 * 24:
+			delta = time() - user["lastMining"]
+			if delta > 60 * 60 * 24:
 				delta = 60 * 60 * 24
 			delta = math.floor(delta)
 			amount = 1 / 86400 * delta
 			while True:
-				if random()<0.5:
+				if random() < 0.5:
 					amount += 1 / 86400 * delta
 				else:
 					break
-			if amount>0:
+			if amount > 0:
 				User.addMoney(event.nick, amount)
 
 			message = event.nick + " has mined " + str(amount) + " botcoin in " + secondsToTime(delta)
@@ -108,8 +108,37 @@ class ModBotcoin:
 					'Invalid command, use like this : "' + self.bot.nick + '.giveMoney <receiver> <amount>"',
 					canal)
 
+	def craftItem( self, event, canal ):
+		msg = event.msg.split(" ",1)[1]
+		if len(msg.split("#", 1)) == 2:
+			user = User.getUserByNick(event.nick)
+			if user:
+				if user["money"] >= 1:
+					User.addMoney(event.nick, -1)
+					msg = event.msg.split(" ", 1)[1]
+					itemTitle = msg.split("#")[0]
+					itemDescription = msg.split("#")[1]
+					item = Item.craftItem(itemTitle, itemDescription, event.nick)
+					if item:
+						message = "You" if canal else event.nick
+						message += " have crafted [" + item["title"] + "] for 1 botcoin"
+						self.bot.send(message, canal)
+				else:
+					message = "You" if canal else event.nick
+					message += " dont' have enough money"
+					message += ", you need at least 1 botcoin" if canal else ""
+					message += " to do that"
+					self.bot.send(message, canal)
+			else:
+				self.bot.send("Something went wrong... Sorry", canal)
+		else:
+			self.bot.send("Use like this : \"botcoin.craftItem <title>#<description>\"", canal)
+
 	def step( self, event ):
 		if event:
+			if event.type == "join":
+				User.createUser(event.nick)
+				return
 			canal = event.nick
 			if event.type == "channel":
 				canal = False
@@ -121,8 +150,10 @@ class ModBotcoin:
 				self.mine(event, canal)
 			elif commands.giveMoney(event.msg, canal):
 				self.giveMoney(event, canal)
+			elif commands.craftItem(event.msg, canal):
+				self.craftItem(event, canal)
 			elif commands.help(event.msg, canal):
-				self.bot.send("commands : getMoney, showMoney, mine, giveMoney <receiver> <amount>, help", canal)
+				self.bot.send("commands : getMoney, showMoney, mine, giveMoney <receiver> <amount>, craftItem <title>#<description>, help", canal)
 
 		else:
 			# Auto mining
