@@ -203,7 +203,7 @@ develop-eggs/
 .installed.cfg
 
 # Sqlite3
-*.db
+#*.db
 
 # Installer logs
 pip-log.txt
