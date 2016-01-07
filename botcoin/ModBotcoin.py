@@ -8,7 +8,7 @@
 
 from time import time
 import sqlite3
-from botcoin import database, User, Item
+from botcoin import database, User, Item, commands
 from random import random
 import math
 
@@ -17,6 +17,7 @@ cursorExecute = database.cursorExecute
 database.init()
 User.init(cursorExecute)
 Item.init(cursorExecute)
+
 
 def secondsToTime(seconds):
 	result = ""
@@ -44,6 +45,7 @@ def secondsToTime(seconds):
 class ModBotcoin():
 	def __init__(self, bot):
 		self.bot = bot
+		commands.init(self.bot.nick)
 		self.pingInterval = 60
 		self.lastPing = time() - self.pingInterval + 1
 		self.bot.send('Botcoin started ! Type "'+self.bot.nick+'.help()" to view the commands')
@@ -53,18 +55,18 @@ class ModBotcoin():
 			canal = event.nick
 			if event.type == "channel":
 				canal = False
-			if (event.msg == self.bot.nick + ".getMoney" and canal == False) or (event.msg =="getMoney" and canal != False):
+			if commands.getMoney(event.msg, canal):
 				money = User.getMoney(event.nick)
 				if not money: return
 				message = "You have " + str(money) + " botcoin"
 				if money >= 2: message += "s"
 				self.bot.send(message, event.nick)
-			elif (event.msg == self.bot.nick + ".showMoney" and canal == False) or (event.msg =="showMoney" and canal != False):
+			elif commands.showMoney(event.msg, canal):
 				money = User.getMoney(event.nick)
 				message = event.nick + " have " + str(money) + " botcoin"
 				if money >= 2: message += "s"
 				self.bot.send(message)
-			elif (event.msg == self.bot.nick + ".mine" and canal == False) or (event.msg =="mine" and canal != False):
+			elif commands.mine(event.msg, canal):
 				user = User.getUserByNick(event.nick)
 				print(user)
 				if user:
@@ -86,7 +88,7 @@ class ModBotcoin():
 					User.updateLastMining(event.nick)
 					self.bot.send(message, canal)
 				pass
-			elif (event.msg.find(self.bot.nick + ".giveMoney") == 0 and canal == False) or (event.msg.find("giveMoney") == 0 and canal != False):
+			elif commands.giveMoney(event.msg, canal):
 				msg = event.msg.split(" ")
 				if len(msg) == 3:
 					amount = msg[2]
@@ -109,7 +111,7 @@ class ModBotcoin():
 				else:
 					self.bot.send('Invalid command, use like this : "'+ self.bot.nick +'.giveMoney <receiver> <amount>"', canal)
 				
-			elif (event.msg == self.bot.nick + ".help" and canal == False) or (event.msg == "help" and canal != False):
+			elif commands.help(event.msg, canal):
 				self.bot.send("commands : getMoney, showMoney, mine, giveMoney <receiver> <amount>, help", canal)
 			
 		else:
