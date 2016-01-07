@@ -1,5 +1,7 @@
 import nolirc, conf
 import mod
+from botcoin.ModBotcoin import ModBotcoin
+
 
 #nolirc.Bot(nick, host, port, login, password, identity, realname, channel = None, autoconnect = True)
 bot = nolirc.Bot(conf.nick, conf.host, conf.port, conf.login, conf.password, conf.identity, conf.realname, channel = conf.channel)
@@ -11,6 +13,7 @@ initialized = False
 #async are called every step
 module_async = [
 	#mod.ModVote(bot)
+	ModBotcoin(bot)
 ]
 
 #sync are called every step ONLY if a message is received
