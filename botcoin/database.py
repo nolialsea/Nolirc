@@ -1,15 +1,19 @@
-from time import time, sleep
-import math, sqlite3
+import math
+import sqlite3
+from time import time
 
 debug = True
 db = sqlite3.connect('botcoin/database.db')
 
-def init():
-	#deleteDatabase()
+
+def init( ):
+	# deleteDatabase()
 	createDatabase()
 
-def cursorExecute(sql, args=()):
-	if debug: print(sql)
+
+def cursorExecute( sql, args = () ):
+	if debug:
+		print(sql)
 	try:
 		cursor = db.cursor()
 		cursor.execute(sql, args)
@@ -22,20 +26,22 @@ def cursorExecute(sql, args=()):
 		db.rollback()
 		# raise e
 		return None
-		
-def deleteDatabase():
+
+
+def deleteDatabase( ):
 	cursorExecute("DROP TABLE IF EXISTS User")
 	cursorExecute("DROP TABLE IF EXISTS Item")
 	cursorExecute("DROP TABLE IF EXISTS Sell")
 	cursorExecute("DROP TABLE IF EXISTS MoneyTransaction")
-	
-def createDatabase():
+
+
+def createDatabase( ):
 	cursorExecute("""
 		CREATE TABLE IF NOT EXISTS User(
 			id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 			nick TEXT UNIQUE,
 			money REAL DEFAULT 0,
-			lastMining INTEGER DEFAULT """+str(math.floor(time()))+"""
+			lastMining INTEGER DEFAULT """ + str(math.floor(time())) + """
 		)
 	""")
 	cursorExecute("""
@@ -44,7 +50,7 @@ def createDatabase():
 			title TEXT,
 			description TEXT,
 			creator INTEGER,
-			dateCreation INTEGER DEFAULT """+str(math.floor(time()))+""",
+			dateCreation INTEGER DEFAULT """ + str(math.floor(time())) + """,
 			owner INTEGER,
 			price REAL DEFAULT 0,
 			forSell INTEGER DEFAULT 0
@@ -57,15 +63,15 @@ def createDatabase():
 			buyer INTEGER,
 			item INTEGER,
 			price REAL,
-			date INTEGER DEFAULT """+str(math.floor(time()))+"""
+			date INTEGER DEFAULT """ + str(math.floor(time())) + """
 		)
 	""")
-	cursorExecute("""	
+	cursorExecute("""
 		CREATE TABLE IF NOT EXISTS MoneyTransaction(
 			id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 			sender INTEGER,
 			receiver INTEGER,
 			amount REAL,
-			date INTEGER DEFAULT """+str(math.floor(time()))+"""
+			date INTEGER DEFAULT """ + str(math.floor(time())) + """
 		)
 	""")
