@@ -66,9 +66,13 @@ class ModBotcoin:
 			if delta > 60 * 60 * 24:
 				delta = 60 * 60 * 24
 			delta = math.floor(delta)
+			if delta == 0:
+				return
 			amount = (self.botcoinPerSecond * delta) + (self.botcoinPerSecond * delta * random())
+			nbTrigger = 1
 			while True:
 				if random() < 0.5:
+					nbTrigger += 1
 					amount += self.botcoinPerSecond * delta * random()
 				else:
 					break
@@ -76,9 +80,11 @@ class ModBotcoin:
 				User.addMoney(event.nick, amount)
 
 			message = event.nick + " has mined " + str(amount) + " botcoin in " + secondsToTime(delta)
-			message += " (" + str(amount * 86400 / delta) + " bcd)"
-			if amount>=2:
+			message += " in "+ str(nbTrigger) +" hit"
+			message += "s" if nbTrigger > 1 else ""
+			if amount >= 2:
 				message += "s"
+			message += " at multiplier x" + str(amount * 86400 / delta)
 			User.updateLastMining(event.nick)
 			self.bot.send(message, canal)
 
