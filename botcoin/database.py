@@ -2,7 +2,7 @@ import math
 import sqlite3
 from time import time
 
-debug = True
+debug = False
 db = None
 
 

@@ -38,6 +38,7 @@ class ModBotcoin:
 		self.bot = bot
 		commands.init(self.bot.nick)
 		self.pingInterval = 20
+		self.botcoinPerSecond = 1 / 86400
 		self.lastPing = time() - self.pingInterval + 1
 		self.bot.send('Botcoin started ! Type "' + self.bot.nick + '.help" to view the commands')
 
@@ -65,17 +66,19 @@ class ModBotcoin:
 			if delta > 60 * 60 * 24:
 				delta = 60 * 60 * 24
 			delta = math.floor(delta)
-			amount = 1 / 86400 * delta
+			amount = (self.botcoinPerSecond * delta) + (self.botcoinPerSecond * delta * random())
 			while True:
 				if random() < 0.5:
-					amount += 1 / 86400 * delta
+					amount += self.botcoinPerSecond * delta * random()
 				else:
 					break
 			if amount > 0:
 				User.addMoney(event.nick, amount)
 
 			message = event.nick + " has mined " + str(amount) + " botcoin in " + secondsToTime(delta)
-			if amount>=2: message += "s"
+			message += " (" + str(amount * 86400 / delta) + " bcd)"
+			if amount>=2:
+				message += "s"
 			User.updateLastMining(event.nick)
 			self.bot.send(message, canal)
 
@@ -134,6 +137,28 @@ class ModBotcoin:
 		else:
 			self.bot.send("Use like this : \"botcoin.craftItem <title>#<description>\"", canal)
 
+	def help(self, event, canal):
+		message = ""
+		userMsg = event.msg.split(" ", 1)
+		userMsg = userMsg[1] if len(userMsg) > 1 else userMsg[0]
+		for key, command in commands.commands.items():
+			description = command["description"]
+			alias = command["alias"]
+			for a in alias:
+				if userMsg == a:
+					message += a + " "
+					message += str(command["args"]) if command["args"] else ""
+					message += " : " + description
+					self.bot.send(message, canal)
+					message = "Alias : " + ", ".join(alias)
+					self.bot.send(message, canal)
+					return
+		command = list(commands.commands.keys())
+		lstCommands = []
+		for c in command:
+			lstCommands.append(c)
+		self.bot.send("commands : " + ", ".join(lstCommands), canal)
+
 	def step( self, event ):
 		if event:
 			if event.type == "join":
@@ -153,7 +178,7 @@ class ModBotcoin:
 			elif commands.craftItem(event.msg, canal):
 				self.craftItem(event, canal)
 			elif commands.help(event.msg, canal):
-				self.bot.send("commands : getMoney, showMoney, mine, giveMoney <receiver> <amount>, craftItem <title>#<description>, help", canal)
+				self.help(event, canal)
 
 		else:
 			# Auto mining
