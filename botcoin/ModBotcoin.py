@@ -37,7 +37,7 @@ class ModBotcoin:
 	def __init__( self, bot ):
 		self.bot = bot
 		commands.init(self.bot.nick)
-		self.pingInterval = 20
+		self.pingInterval = 60
 		self.botcoinPerSecond = 1 / 86400
 		self.lastPing = time() - self.pingInterval + 1
 		self.bot.send('Botcoin started ! Type "' + self.bot.nick + '.help" to view the commands')
