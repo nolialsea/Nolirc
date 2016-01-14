@@ -153,11 +153,12 @@ class ModBotcoin:
 			implemented = command["implemented"]
 			for a in alias:
 				if userMsg == a:
-					message += a + " "
+					message = "" if implemented else "[Not implemented]"
+					message += " " + a + " "
 					message += str(command["args"]) if command["args"] else ""
 					message += " : " + description
 					self.bot.send(message, canal)
-					message = "Implemented: " + str(implemented) + ", Alias : " + ", ".join(alias)
+					message = "Alias : " + ", ".join(alias)
 					self.bot.send(message, canal)
 					return
 		command = list(commands.commands.keys())
