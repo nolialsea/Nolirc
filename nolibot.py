@@ -1,4 +1,5 @@
-import nolirc, conf
+import nolirc
+import conf
 import mod
 from botcoin.ModBotcoin import ModBotcoin
 
@@ -10,7 +11,6 @@ initialized = False
 # List of mods you want to use
 # async are called every step
 module_async = [
-	# mod.ModVote(bot)
 	ModBotcoin(bot)
 ]
 

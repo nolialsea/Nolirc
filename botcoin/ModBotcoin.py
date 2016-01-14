@@ -94,7 +94,7 @@ class ModBotcoin:
 			amount = msg[2]
 			try:
 				amount = float(msg[2])
-			except Exception as e:
+			except Exception:
 				self.bot.send(
 						'Transaction failed, use like this : "' + self.bot.nick + '.giveMoney <receiver> <amount>"',
 						canal)
@@ -118,7 +118,7 @@ class ModBotcoin:
 					canal)
 
 	def craftItem( self, event, canal ):
-		msg = event.msg.split(" ",1)[1]
+		msg = event.msg.split(" ", 1)[1]
 		if len(msg.split("#", 1)) == 2:
 			user = User.getUserByNick(event.nick)
 			if user:
@@ -150,13 +150,14 @@ class ModBotcoin:
 		for key, command in commands.commands.items():
 			description = command["description"]
 			alias = command["alias"]
+			implemented = command["implemented"]
 			for a in alias:
 				if userMsg == a:
 					message += a + " "
 					message += str(command["args"]) if command["args"] else ""
 					message += " : " + description
 					self.bot.send(message, canal)
-					message = "Alias : " + ", ".join(alias)
+					message = "Implemented: " + str(implemented) + ", Alias : " + ", ".join(alias)
 					self.bot.send(message, canal)
 					return
 		command = list(commands.commands.keys())

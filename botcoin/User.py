@@ -43,7 +43,6 @@ def getUserByNick( nick ):
 
 
 def getMoney( nick ):
-	result = None
 	user = getUserByNick(nick)
 	if user:
 		return user["money"]
@@ -55,7 +54,7 @@ def giveMoney( nickSender, nickReveiver, amount ):
 	sender = getUserByNick(nickSender)
 	receiver = getUserByNick(nickReveiver)
 	if sender and receiver:
-		if sender["money"] < amount:
+		if sender["money"]<amount:
 			amount = sender["money"]
 		cursorExecute(
 				"INSERT INTO MoneyTransaction (sender, receiver, amount) VALUES (?, ?, ?)",

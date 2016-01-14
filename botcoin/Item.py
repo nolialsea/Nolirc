@@ -1,16 +1,16 @@
-def curxecute( sql, args ):
+def curxecute(sql, args):
 	return sql, args
 
 
 cursorExecute = curxecute
 
 
-def init( cursorExecute_ ):
+def init(cursorExecute_):
 	global cursorExecute
 	cursorExecute = cursorExecute_
 
 
-def craftItem( title, description, creator ):
+def craftItem(title, description, creator):
 	cursorExecute(
 			"INSERT INTO Item (title, description, creator, owner) VALUES (?, ?, ( SELECT id FROM User WHERE nick = ? ), ( SELECT id FROM User WHERE nick = ? ))",
 			(title, description, creator, creator)

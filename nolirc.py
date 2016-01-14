@@ -1,8 +1,10 @@
-﻿import socket, string, time, select
+﻿import socket
+import time
+import select
 
 
 class Nolirc:
-	def __init__( self ):
+	def __init__(self):
 		self.host = "irc.mibbit.net"
 		self.port = 6667
 		self.password = "noli_lib_irc"
@@ -22,18 +24,18 @@ class Nolirc:
 
 		self.readbuffer = ""
 
-	def setServer( self, host, port ):
+	def setServer(self, host, port):
 		self.host = host
 		self.port = port
 
-	def setLogin( self, nick, password, identity = "", realname = "" ):
+	def setLogin(self, nick, password, identity = "", realname = ""):
 		self.nick = nick
 		self.password = password
 
 		self.identity = identity if identity != "" else self.identity
 		self.realname = realname if realname != "" else self.realname
 
-	def connect( self, host = None, port = None, nick = None, password = None, identity = None, realname = None, channel = None ):
+	def connect(self, host = None, port = None, nick = None, password = None, identity = None, realname = None, channel = None):
 		self.host = host if host is not None else self.host
 		self.port = port if port is not None else self.port
 
@@ -46,7 +48,7 @@ class Nolirc:
 		if channel is not None:
 			self.connectToChannel(channel)
 
-	def connectToServer( self ):
+	def connectToServer(self):
 		self.sock = socket.socket()
 		if (self.host != "") and (self.port != 0):
 			self.sock.connect((self.host, self.port))
@@ -68,15 +70,12 @@ class Nolirc:
 			line = line.rstrip()
 			line = line.split()
 
-			msg = getMsgFromLine(line)
-			nick = getNickFromLine(line)
-
 			if line[0] == "PING":
 				self.sock.send(bytes("PONG %s\r\n" % line[1], "UTF-8"))
 
 		return self.sock
 
-	def disconnect( self, reason = "" ):
+	def disconnect(self, reason = ""):
 		if reason != "":
 			self.send(reason)
 		else:
@@ -89,7 +88,7 @@ class Nolirc:
 		self.sock.close()
 		self.sock = None
 
-	def connectToChannel( self, chan = False ):
+	def connectToChannel(self, chan = False):
 		self.sock.send(bytes("PART %s\r\n" % self.channel, "UTF-8"))
 		time.sleep(0.5)
 		if chan:
@@ -100,21 +99,21 @@ class Nolirc:
 			time.sleep(0.5)
 			self.sock.send(bytes("PRIVMSG %s %s\r\n" % (self.channel, self.message_connexion), "UTF-8"))
 
-	def disconnectChannel( self, chan = None ):
+	def disconnectChannel(self, chan = None):
 		if chan is not None:
 			self.sock.send(bytes("PART %s\r\n" % chan, "UTF-8"))
 		else:
 			self.sock.send(bytes("PART %s\r\n" % self.channel, "UTF-8"))
 
-	def getChannelNames( self ):
+	def getChannelNames(self):
 		self.sock.send(bytes("NAMES %s\r\n" % self.channel, "UTF-8"))
 
-	def send( self, msg, chan = False ):
+	def send(self, msg, chan = False):
 		if not chan:
 			chan = self.channel
 		self.sock.send(bytes("PRIVMSG %s %s\r\n" % (chan, msg), "UTF-8"))
 
-	def step( self, timeout = None ):
+	def step(self, timeout = None):
 		if self.sock is not None:
 
 			ready = select.select([self.sock], [], [], self.timeout if timeout is None else timeout)
@@ -206,7 +205,7 @@ class Nolirc:
 
 
 class MsgEvent:
-	def __init__( self, type, id, msg, chan = False ):
+	def __init__(self, type, id, msg, chan = False):
 		self.type = type
 		self.id = id
 		self.msg = msg
@@ -217,12 +216,12 @@ class MsgEvent:
 		self.chan = chan
 		self.channel = self.chan
 
-	def get( self ):
+	def get(self):
 		return self.type, self.id, self.msg
 
 
 class Bot(Nolirc):
-	def __init__( self, nick, host, port, login, password, identity, realname, channel = None, autoconnect = True ):
+	def __init__(self, nick, host, port, login, password, identity, realname, channel = None, autoconnect = True):
 		Nolirc.__init__(self)
 
 		self.identity = identity
@@ -238,12 +237,12 @@ class Bot(Nolirc):
 		self.setServer(host, port)
 		self.setLogin(login, password)
 
-		if self.channel is not None and autoconnect == True:
+		if self.channel is not None and autoconnect is True:
 			self.connectToServer()
 			self.connectToChannel(self.channel)
 
 
-def getMsgFromLine( line ):
+def getMsgFromLine(line):
 	msg = list(line)
 	msg = msg[3:]
 	msg = " ".join(msg)
@@ -253,7 +252,7 @@ def getMsgFromLine( line ):
 	return msg
 
 
-def getIdentityFromLine( line ):
+def getIdentityFromLine(line):
 	identity = ""
 	begin = False
 	for letter in line[0]:
@@ -265,7 +264,7 @@ def getIdentityFromLine( line ):
 	return identity
 
 
-def getNickFromLine( line ):
+def getNickFromLine(line):
 	nick = ""
 	i = 1
 	while i:
