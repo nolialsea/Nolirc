@@ -1,4 +1,4 @@
-botNick = ["bc"]
+botNick = ["bc", ""]
 _commandChar = [".", ":"]
 
 commands = {
