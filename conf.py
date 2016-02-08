@@ -1,7 +1,7 @@
 nick = "botcoin"
 host = "irc.mibbit.net"
 port = 6667
-channel = "#botcoin"
+channel = "#cbna"
 login = "botcoin"
 password = "mypassmypassmypass"
 identity = "NoliBot"
